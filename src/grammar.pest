@@ -1,0 +1,62 @@
+// Whitespace matches only spaces and tabs
+WHITESPACE = _{ " " | "\t" }
+
+// A line matches a sequence of expressions, comments, or prose words
+line = { SOI ~ (expr | comment | prose)* ~ EOI }
+
+// Comments start with # or // and consume until the end of the line
+comment = @{ ("#" | "//") ~ (!EOI ~ ANY)* }
+
+// Prose is any sequence of alphabetic/punctuation characters
+prose = @{ (ALPHABETIC | PUNCTUATION | SYMBOL)+ }
+
+expr = { assignment | conversion | add_sub }
+
+assignment = { identifier ~ "=" ~ expr }
+
+conversion = { add_sub ~ convert_kw ~ identifier }
+
+add_sub = { mul_div ~ (add_sub_op ~ mul_div)* }
+add_sub_op = { "+" | "-" | plus_kw | minus_kw }
+
+mul_div = { power ~ (mul_div_op ~ power)* }
+mul_div_op = { "*" | "/" | times_kw | div_kw | of_kw }
+
+power = { primary ~ ("^" ~ primary)* }
+
+primary = {
+    percentage |
+    currency_amount |
+    unit_amount |
+    number |
+    variable |
+    "(" ~ expr ~ ")" |
+    unary_minus
+}
+
+unary_minus = { "-" ~ primary }
+
+percentage = { (number | variable) ~ "%" }
+currency_amount = { (currency_symbol ~ number) | (number ~ currency_code) }
+unit_amount = { number ~ unit_name }
+
+number = @{ "-"? ~ ASCII_DIGIT+ ~ ("," ~ ASCII_DIGIT{3})* ~ ("." ~ ASCII_DIGIT+)? }
+variable = @{ !(plus_kw | minus_kw | times_kw | div_kw | of_kw | convert_kw | unit_name | currency_code) ~ identifier }
+identifier = @{ ASCII_ALPHA ~ (ASCII_ALPHA | ASCII_DIGIT)* }
+
+currency_symbol = { "$" | "€" | "£" | "¥" }
+currency_code = @{ ("USD" | "EUR" | "GBP" | "JPY" | "CAD" | "AUD" | "BRL" | "CNY") ~ !ASCII_ALPHA }
+
+unit_name = @{
+    ("kilometers" | "kilometer" | "meters" | "meter" | "miles" | "mile" | "km" |
+     "minutes" | "minute" | "hours" | "hour" | "mins" | "min" | "seconds" | "second" | "secs" | "sec" |
+     "kilograms" | "kilogram" | "grams" | "gram" | "pounds" | "pound" | "lbs" |
+     "m" | "h" | "s" | "g") ~ !ASCII_ALPHA
+}
+
+convert_kw = @{ ("in" | "to" | "as") ~ !ASCII_ALPHA }
+plus_kw    = @{ "plus" ~ !ASCII_ALPHA }
+minus_kw   = @{ "minus" ~ !ASCII_ALPHA }
+times_kw   = @{ "times" ~ !ASCII_ALPHA }
+div_kw     = @{ ("divided by" | "over") ~ !ASCII_ALPHA }
+of_kw      = @{ "of" ~ !ASCII_ALPHA }
