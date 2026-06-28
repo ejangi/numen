@@ -1,6 +1,6 @@
 # Numen — Natural Language Notepad Calculator
 
-Numen is an open-source, Linux-native clone of the Soulver app. It features a reactive, synchronized split-pane UI where the left pane is a rich natural-language notepad and the right pane displays real-time, line-by-line mathematical evaluation.
+Numen is an open-source, Linux-native app that allows you to quickly write and calculate with natural language. It features a reactive, synchronized split-pane UI where the left pane is a rich natural-language notepad and the right pane displays real-time, line-by-line mathematical evaluation.
 
 ```
 ┌────────────────────────────────────────────────────────┐
