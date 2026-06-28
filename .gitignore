@@ -1,0 +1,54 @@
+# ==========================================
+# Rust / Cargo Output
+# ==========================================
+/target/
+**/*.rs.bk
+Cargo.lock
+
+# Note: Keep Cargo.lock if this is an end-user application binary,
+# but ignore it if it's strictly a library/wheel build. For a desktop app,
+# keeping it tracked is standard, but you can uncomment the line above if needed.
+
+# ==========================================
+# Python / PyInstaller Output
+# ==========================================
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.venv/
+env/
+venv/
+
+# PyInstaller / Build Artifacts
+/build/
+/dist/
+*.manifest
+*.spec
+
+# ==========================================
+# Poetry / Packaging (if applicable)
+# ==========================================
+.poetry/
+poetry.lock
+
+# ==========================================
+# OS & IDE Specifics
+# ==========================================
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+ehthumbs.db
+
+# JetBrains (PyCharm / RustRover)
+.idea/
+
+# VS Code
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.jsons
