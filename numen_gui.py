@@ -149,7 +149,7 @@ class NumenWindow(QMainWindow):
 
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("Numen — Natural Language Notepad Calculator")
+        self.setWindowTitle("Numen")
         self.resize(1024, 768)
 
         # Set Config paths
@@ -259,24 +259,6 @@ class NumenWindow(QMainWindow):
         main_layout.setContentsMargins(0, 0, 0, 0)
         main_layout.setSpacing(0)
 
-        # Custom header bar
-        header = QFrame(self)
-        header.setObjectName("header")
-        header.setFixedHeight(64)
-        header_layout = QHBoxLayout(header)
-        header_layout.setContentsMargins(20, 0, 20, 0)
-
-        title = QLabel("NUMEN", header)
-        title.setObjectName("title")
-        title.setFont(QFont("Outfit", 16, QFont.Bold))
-        header_layout.addWidget(title)
-
-        header_layout.addStretch()
-
-        # Action buttons removed for a clean, minimalist layout
-
-        main_layout.addWidget(header)
-
         # Split pane (Drawer, Notepad, and results)
         splitter = QSplitter(Qt.Horizontal, self)
         splitter.setObjectName("splitter")
@@ -345,14 +327,7 @@ class NumenWindow(QMainWindow):
             QMainWindow {
                 background-color: #0b0b0d;
             }
-            #header {
-                background-color: #0f0f12;
-                border-bottom: 1px solid #1f1f23;
-            }
-            #title {
-                color: #ffffff;
-                letter-spacing: 2px;
-            }
+
 
             QPushButton {
                 background-color: #1c1c21;
