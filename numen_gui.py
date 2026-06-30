@@ -12,7 +12,7 @@ from PySide6.QtGui import (
     QPainter, QColor, QFont, QPen, QTextCursor, QTextBlockFormat, QIcon, QFontDatabase
 )
 from PySide6.QtCore import (
-    Qt, QRectF, QTimer, QThread, Signal, QObject, QPoint
+    Qt, QRectF, QTimer, QThread, Signal, QObject, QPoint, QEvent
 )
 
 # Try to import the compiled Rust engine
@@ -199,19 +199,36 @@ class NumenWindow(QMainWindow):
     def setup_zoom_shortcuts(self):
         from PySide6.QtGui import QKeySequence, QShortcut
 
-        # Ctrl + Plus (and Ctrl + Equal) for Zoom In
+        # Ctrl + Plus, Ctrl + Shift + Plus, and Ctrl + Equal for Zoom In
         self.shortcut_zoom_in = QShortcut(QKeySequence("Ctrl++"), self)
         self.shortcut_zoom_in.activated.connect(self.zoom_in)
+        self.shortcut_zoom_in_shift = QShortcut(QKeySequence("Ctrl+Shift+="), self)
+        self.shortcut_zoom_in_shift.activated.connect(self.zoom_in)
         self.shortcut_zoom_in_equal = QShortcut(QKeySequence("Ctrl+="), self)
         self.shortcut_zoom_in_equal.activated.connect(self.zoom_in)
 
-        # Ctrl + Minus for Zoom Out
+        # Ctrl + Minus and Ctrl + Underscore for Zoom Out
         self.shortcut_zoom_out = QShortcut(QKeySequence("Ctrl+-"), self)
         self.shortcut_zoom_out.activated.connect(self.zoom_out)
+        self.shortcut_zoom_out_shift = QShortcut(QKeySequence("Ctrl+_"), self)
+        self.shortcut_zoom_out_shift.activated.connect(self.zoom_out)
 
         # Ctrl + 0 to Reset Zoom
         self.shortcut_zoom_reset = QShortcut(QKeySequence("Ctrl+0"), self)
         self.shortcut_zoom_reset.activated.connect(self.zoom_reset)
+
+        # Install event filter to capture Ctrl + Mouse Wheel zooming
+        self.notepad.installEventFilter(self)
+
+    def eventFilter(self, obj, event):
+        if obj == self.notepad and event.type() == QEvent.Wheel:
+            if event.modifiers() & Qt.ControlModifier:
+                if event.angleDelta().y() > 0:
+                    self.zoom_in()
+                else:
+                    self.zoom_out()
+                return True # Consume the event
+        return super().eventFilter(obj, event)
 
     def zoom_in(self):
         self.notepad.zoomIn(1)
